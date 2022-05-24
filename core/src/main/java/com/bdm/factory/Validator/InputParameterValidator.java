@@ -1,4 +1,4 @@
-package com.bdm.factory.Validator;
+package com.bdm.factory.validator;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

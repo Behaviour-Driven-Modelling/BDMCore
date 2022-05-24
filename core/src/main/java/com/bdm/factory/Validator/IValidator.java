@@ -1,4 +1,4 @@
-package com.bdm.factory.Validator;
+package com.bdm.factory.validator;
 
 public interface IValidator<T> {
     public Boolean Validate(T args);

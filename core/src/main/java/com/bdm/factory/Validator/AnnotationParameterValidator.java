@@ -1,4 +1,4 @@
-package com.bdm.factory.Validator;
+package com.bdm.factory.validator;
 
 import com.fujitsu.vdmj.ast.lex.LexStringToken;
 import com.fujitsu.vdmj.tc.expressions.TCExpression;
