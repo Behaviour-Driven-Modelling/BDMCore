@@ -5,5 +5,6 @@ public enum AnnotationTypes {
     When,
     Then,
     Before,
-    BeforeAll
+    BeforeAll,
+    None
 }
