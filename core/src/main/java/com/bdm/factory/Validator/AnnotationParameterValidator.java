@@ -12,18 +12,19 @@ public class AnnotationParameterValidator implements IValidator<TCExpression[]> 
     @Override
     public Boolean Validate(TCExpression[] args) {
         if (args.length != 3) {
-            _message = "Validate function takes three parameters in string array: Annotation parameter 1, annotation parameter 2 and Annotation type.";
+            _message = "Validate function takes three parameters in string array: Annotation value parameter, annotation name parameter 2 and Annotation type.";
             _code = 6009;
             return false;
         }
         if (!(args[2] instanceof TCStringLiteralExpression)) {
             _code = 6010;
             _message = "Validate function takes a string value as third parameter: Annotation type.";
+            return false;
         }
         TCStringLiteralExpression bdmType = (TCStringLiteralExpression)args[2];
         if (!(args[0] instanceof TCStringLiteralExpression))
         {
-            _code = 6010;
+            _code = 0;
             _message = String.format("@%s argument 2 must be a string value",bdmType.value.value);
             return false;
         } 
@@ -31,7 +32,7 @@ public class AnnotationParameterValidator implements IValidator<TCExpression[]> 
 
         if (!(args[1] instanceof TCStringLiteralExpression))
         {
-            _code = 6010;
+            _code = 1;
             _message = String.format("@%s argument 1 must be a string value",bdmType.value.value);
             return false;
         } 

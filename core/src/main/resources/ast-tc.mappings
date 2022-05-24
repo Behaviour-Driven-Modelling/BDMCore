@@ -1,0 +1,8 @@
+##########################################################################################
+# The annotation class mapping definition for the VDMJ Type Checker. See ClassMapper.
+##########################################################################################
+
+# annotations
+package annotations.ast to annotations.tc;
+map ASTStepDefinitionAnnotation{name, args} to TCStepDefinitionAnnotation(name, args);
+

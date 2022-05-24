@@ -17,5 +17,23 @@ public class BDMUtility {
             default:
                 return "io.cucumber.java.en.Given";
         }
-	}
+    }
+
+    public static String BDMTypeValidator(AnnotationTypes type) {
+        switch (type) {
+            case Given:
+                return "Given";
+            case When:
+                return "When";
+            case Then:
+                return "Then";
+            case Before:
+                return "Before";
+            case BeforeAll:
+                return "BeforeAll";
+            default:
+                return "Given";
+        }
+    }
 }
+

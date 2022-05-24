@@ -31,7 +31,7 @@ public class StartMethod implements IMethod{
 
         AnnotationsAttribute annotationsAttribute = _annotation.Create(constPool, annotationType, annotationValue);
 
-        String body = String.format("{String[] fileNamesArray = bdd.vdm.VDMUtility.getAllVDMFiles();readSpecification(fileNamesArray);}");
+        String body = String.format("{String[] fileNamesArray = com.bdm.VDMUtility.getAllVDMFiles();readSpecification(fileNamesArray);}");
         CtMethod newMethod = CtNewMethod.make(CtClass.voidType, "start", null, null, body, declaringClass);
         newMethod.getMethodInfo().addAttribute(annotationsAttribute);
         newMethod.setModifiers(AccessFlag.setPublic(Modifier.STATIC));

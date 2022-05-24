@@ -98,6 +98,31 @@
           <artifactId>maven-project-info-reports-plugin</artifactId>
           <version>3.0.0</version>
         </plugin>
+        <plugin>
+          <artifactId>maven-assembly-plugin</artifactId>
+          <configuration>
+            <archive>
+              <manifest>
+                <mainClass>annotations.ast.ASTStepDefinition</mainClass>
+              </manifest>
+            </archive>
+            <!-- <descriptorRefs>
+              <descriptorRef>src/assembly/jar-with-dependencies-and-exclude-classes.xml</descriptorRef>
+            </descriptorRefs> -->
+            <descriptors>
+                    <descriptor>src/assembly/jar-with-dependencies-and-exclude-classes.xml</descriptor> 
+                </descriptors>
+          </configuration>
+          <executions>
+            <execution>
+              <id>make-assembly</id> <!-- this is used for inheritance merges -->
+              <phase>package</phase> <!-- bind to the packaging phase -->
+              <goals>
+                <goal>single</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
       </plugins>
     </pluginManagement>
   </build>

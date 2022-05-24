@@ -13,6 +13,8 @@ public class ValidatorFactory implements IAbstractFactory<IValidator,ValidatorLo
                 return new InputParameterValidator();
             case AnnotationValidator:
                 return new AnnotationParameterValidator();
+            case StepDefinitionValidator:
+                return new StepDefinitionValidator();
             default:
                 return new InputParameterValidator();
         }
