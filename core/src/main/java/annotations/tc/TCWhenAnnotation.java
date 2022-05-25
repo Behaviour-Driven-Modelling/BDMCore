@@ -1,8 +1,8 @@
 package annotations.tc;
 
 
+import com.bdm.AnnotationTypes;
 import com.bdm.StepDefinitionBuilder;
-import com.bdm.StepDefinitionCleaner;
 import com.fujitsu.vdmj.tc.annotations.TCAnnotation;
 import com.fujitsu.vdmj.tc.definitions.TCClassDefinition;
 import com.fujitsu.vdmj.tc.definitions.TCDefinition;
@@ -11,16 +11,18 @@ import com.fujitsu.vdmj.tc.expressions.TCExpressionList;
 import com.fujitsu.vdmj.tc.lex.TCIdentifierToken;
 import com.fujitsu.vdmj.tc.modules.TCModule;
 import com.fujitsu.vdmj.tc.statements.TCStatement;
+import com.fujitsu.vdmj.tc.types.TCType;
 import com.fujitsu.vdmj.typechecker.Environment;
 import com.fujitsu.vdmj.typechecker.NameScope;
 
 
 
-
-public class TCStepDefinitionAnnotation extends TCAnnotation
+public class TCWhenAnnotation extends TCAnnotation
 {
 	private static final long serialVersionUID = 1L;
-    public TCStepDefinitionAnnotation(TCIdentifierToken name, TCExpressionList args)
+
+
+	public TCWhenAnnotation(TCIdentifierToken name, TCExpressionList args)
 	{
 		super(name, args);
 	}
@@ -28,11 +30,11 @@ public class TCStepDefinitionAnnotation extends TCAnnotation
 	public static void doInit()
 	{
 	}
-
-    @Override
+	@Override
 	public void tcBefore(TCDefinition def, Environment env, NameScope scope)
 	{
-		name.report(6009, "@StepDefinitions only applies to classes");
+		StepDefinitionBuilder stepDefinitionBuilder = new StepDefinitionBuilder();
+		stepDefinitionBuilder.BuildStepDefinitionMethod(def, AnnotationTypes.When, args.elementAt(1),args.elementAt(0));
 		
 	}
 	
@@ -40,39 +42,36 @@ public class TCStepDefinitionAnnotation extends TCAnnotation
 	@Override
 	public void tcBefore(TCModule module)
 	{
-		name.report(6009, "@StepDefinitions only applies to classes");
+		name.report(6009, "@When only applies to definitions");
 	}
 
 	@Override
 	public void tcBefore(TCClassDefinition clazz)
 	{
-        TCExpression nameArg = args.elementAt(0);
-		StepDefinitionBuilder stepDefinitionBuilder = new StepDefinitionBuilder();
-		stepDefinitionBuilder.BuildStepDefinitionClass(clazz.name.getName(), nameArg);
-		
+		name.report(6009, "@When only applies to definitions");
+
 	}
 
 	@Override
 	public void tcBefore(TCExpression exp, Environment env, NameScope scope)
 	{
-		
-		name.report(6009, "@StepDefinitions only applies to classes");
+		name.report(6009, "@When only applies to definitions");
 	}
 
 	@Override
 	public void tcBefore(TCStatement stmt, Environment env, NameScope scope)
 	{
+		name.report(6009, "@When only applies to definitions");
+	}
+
+	@Override
+	public void tcAfter(TCDefinition def, TCType type, Environment env, NameScope scope)
+	{
 		
-		name.report(6009, "@StepDefinitions only applies to classes");
 	}
 
-    @Override
-	public void tcAfter(TCClassDefinition clazz){
-        StepDefinitionCleaner stepDefinitionCleaner = new StepDefinitionCleaner();
-		stepDefinitionCleaner.Cleanup(clazz);
-	}
+	
 
-
-   
+	
 
 }

@@ -8,7 +8,6 @@ import com.bdm.factory.method.IMethod;
 import com.bdm.factory.method.MethodFactory;
 import com.bdm.factory.validator.IValidator;
 import com.bdm.factory.validator.ValidatorFactory;
-import com.fujitsu.vdmj.ast.lex.LexStringToken;
 import com.fujitsu.vdmj.tc.definitions.TCDefinition;
 import com.fujitsu.vdmj.tc.expressions.TCExpression;
 import com.fujitsu.vdmj.tc.expressions.TCStringLiteralExpression;
@@ -55,19 +54,17 @@ public class StepDefinitionBuilder {
         ValidatorFactory validatorFactory = (ValidatorFactory)FactoryProvider.GetFactory(FactoryLocator.ValidatorFactory);
         IValidator<TCExpression[]> annotationValidator = (IValidator<TCExpression[]>)validatorFactory.create(ValidatorLocator.AnnotationValidator);
         IValidator<String[]>  inputParameterValidator = (IValidator<String[]>)validatorFactory.create(ValidatorLocator.InputValidator);
-
         TCExpression[] args = new TCExpression[2];
         args[0] = valueArgument;
         args[1] = nameArgument;
-        args[2] = new TCStringLiteralExpression(new LexStringToken(BDMUtility.BDMTypeValidator(annotationType), null));
-
         if(annotationValidator.Validate(args)) {
             String[] inputArgs = new String[2];
             TCStringLiteralExpression valueArgumentSL = (TCStringLiteralExpression)valueArgument;
-            TCStringLiteralExpression nameArgumentSL = (TCStringLiteralExpression)valueArgument;
+            TCStringLiteralExpression nameArgumentSL = (TCStringLiteralExpression)nameArgument;
             
             inputArgs[0] = valueArgumentSL.value.value;
             inputArgs[1] = def.name.toString();
+
             try {
                 if(inputParameterValidator.Validate(inputArgs)) {
                     ClassPool pool = ClassPool.getDefault();
@@ -108,6 +105,7 @@ public class StepDefinitionBuilder {
             ctclass.defrost();
         }
         try {
+            
             int idxStartBody = def.toString().lastIndexOf("=");
             if(def.toString().substring(idxStartBody+1).trim().contains("skip")) {
                 ctclass.addMethod(stepDefinitionMethod.Create(temporaryObjectName, def.name.getName(), inputParameters, annotationType, annotationValue, ctclass, true));
@@ -133,7 +131,7 @@ public class StepDefinitionBuilder {
         try {
             ctclass.addMethod(startMethod.Create(temporaryObjectName, "start", null, AnnotationTypes.BeforeAll, null, ctclass, false));
             ctclass.addMethod(setupMethod.Create(temporaryObjectName, "setup", null, AnnotationTypes.Before, null, ctclass, false));
-            ctclass.addMethod(helperMethod.Create(temporaryObjectName, "test", null, null, null, ctclass, false));                
+            ctclass.addMethod(helperMethod.Create(temporaryObjectName, ctclass.getName(), null, null, null, ctclass, false));                
         } catch (DuplicateMemberException exce) {
             //System.out.printf("exception thrown: %s %s\n", exce.getMessage(),this);
         } 

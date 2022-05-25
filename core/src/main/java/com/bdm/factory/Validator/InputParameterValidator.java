@@ -22,7 +22,7 @@ public class InputParameterValidator implements IValidator<String[]> {
             _code = 6009;
             return false;
         }
-
+        
         Matcher m1 = Pattern.compile(_regexCurlyBrackets).matcher(args[0]);
         int idx = 0;
         int idxStart = args[1].indexOf("(");
@@ -39,7 +39,7 @@ public class InputParameterValidator implements IValidator<String[]> {
             }
             idx++;
             while(m1.find()){
-                if (idx+1 < parameterlist.length) {
+                if (idx+1 <= parameterlist.length) {
                     if(VDMUtility.DataTypeJAVAToVDM.get(m1.group(1)).trim().equals(parameterlist[idx])) {
                     }  else {
                         _code = 6009;
@@ -60,11 +60,11 @@ public class InputParameterValidator implements IValidator<String[]> {
         } else {
             _returnValues = new String[0];
             Matcher m2 = Pattern.compile(_regexParenthesis).matcher(args[1]);
-				if(m2.find()){
-                    _code = 6009;
-                    _message = "Parameterlist must be empty";
-                    return false;
-				}
+            if(m2.find()){
+                _code = 6009;
+                _message = "Parameterlist must be empty";
+                return false;
+            }
         }
 
         

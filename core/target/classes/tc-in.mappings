@@ -4,4 +4,7 @@
 
 # annotations
 package annotations.tc to annotations.in;
+map TCGivenAnnotation{name, args} to INNullAnnotation(name,args);
+map TCWhenAnnotation{name, args} to INNullAnnotation(name,args);
+map TCThenAnnotation{name, args} to INNullAnnotation(name,args);
 map TCStepDefinitionAnnotation{name, args} to INNullAnnotation(name,args);

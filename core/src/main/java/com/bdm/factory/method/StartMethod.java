@@ -3,7 +3,6 @@ package com.bdm.factory.method;
 import com.bdm.AnnotationTypes;
 import com.bdm.factory.annotation.IAnnotation;
 
-import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.CtMethod;
 import javassist.CtNewMethod;

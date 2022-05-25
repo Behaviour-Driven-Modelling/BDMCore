@@ -4,5 +4,8 @@
 
 # annotations
 package annotations.ast to annotations.tc;
+map ASTGivenAnnotation{name, args} to TCGivenAnnotation(name, args);
+map ASTWhenAnnotation{name, args} to TCWhenAnnotation(name, args);
+map ASTThenAnnotation{name, args} to TCThenAnnotation(name, args);
 map ASTStepDefinitionAnnotation{name, args} to TCStepDefinitionAnnotation(name, args);
 
