@@ -21,13 +21,11 @@
  *	SPDX-License-Identifier: GPL-3.0-or-later
  *
  ******************************************************************************/
-package com.bdm.factory.method;
+package com.bdm.factory.validators;
 
-import com.bdm.AnnotationTypes;
-
-import javassist.CtClass;
-import javassist.CtMethod;
-
-public interface IMethod {
-    CtMethod Create(String TemporaryObjectName, String functionName, String[] parametersParam, AnnotationTypes annotationType, String annotationValue, CtClass declaringClass, Boolean pending) throws Exception;
+public interface IValidator<T> {
+    public Boolean Validate(T args);
+    public String Message();
+    public int Code();
+    public T ReturnValues();
 }

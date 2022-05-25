@@ -21,13 +21,26 @@
  *	SPDX-License-Identifier: GPL-3.0-or-later
  *
  ******************************************************************************/
-package com.bdm.factory.method;
+package com.bdm.factory.validators;
 
-import com.bdm.AnnotationTypes;
+import com.bdm.factory.IAbstractFactory;
+import com.bdm.factory.locators.ValidatorLocator;
 
-import javassist.CtClass;
-import javassist.CtMethod;
+@SuppressWarnings("rawtypes")
+public class ValidatorFactory implements IAbstractFactory<IValidator,ValidatorLocator>{
 
-public interface IMethod {
-    CtMethod Create(String TemporaryObjectName, String functionName, String[] parametersParam, AnnotationTypes annotationType, String annotationValue, CtClass declaringClass, Boolean pending) throws Exception;
+    @Override
+    public IValidator create(ValidatorLocator choice) {
+        switch (choice) {
+            case InputValidator:
+                return new InputParameterValidator();
+            case AnnotationValidator:
+                return new AnnotationParameterValidator();
+            case StepDefinitionValidator:
+                return new StepDefinitionValidator();
+            default:
+                return new InputParameterValidator();
+        }
+    }
+    
 }

@@ -30,6 +30,7 @@ public class TCGivenAnnotation extends TCAnnotation
 	public static void doInit()
 	{
 	}
+	/*  */
 	@Override
 	public void tcBefore(TCDefinition def, Environment env, NameScope scope)
 	{

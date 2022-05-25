@@ -1,4 +1,27 @@
-package com.bdm.factory.validator;
+/*******************************************************************************
+ *
+ *	Copyright (c) 2022 Malthe Dalgaard Jensen & Kristoffer Stampe Villadsen.
+ *
+ *	Author: Malthe Dalgaard Jensen & Kristoffer Stampe Villadsen
+ *
+ *	This file is part of BDMCore.
+ *
+ *	BDMCore is free software: you can redistribute it and/or modify
+ *	it under the terms of the GNU General Public License as published by
+ *	the Free Software Foundation, either version 3 of the License, or
+ *	(at your option) any later version.
+ *
+ *	BDMCore is distributed in the hope that it will be useful,
+ *	but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *	GNU General Public License for more details.
+ *
+ *	You should have received a copy of the GNU General Public License
+ *	along with BDMCore.  If not, see <http://www.gnu.org/licenses/>.
+ *	SPDX-License-Identifier: GPL-3.0-or-later
+ *
+ ******************************************************************************/
+package com.bdm.factory.validators;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -14,20 +37,22 @@ public class InputParameterValidator implements IValidator<String[]> {
     private String _message = "";
     private int _code = 0;
 
+    /* This validator checks if the input parameter types are the same for both the annotation and the operation definition */
     @Override
     public Boolean Validate(String[] args) {
-
+        /* Validates size */
         if (args.length != 2) {
             _message = "Validate function takes two parameters in string array: Annotation string and definition string.";
             _code = 6009;
             return false;
         }
-        
+        /* Create identifier pattern for annotation parameters */
         Matcher m1 = Pattern.compile(_regexCurlyBrackets).matcher(args[0]);
         int idx = 0;
         int idxStart = args[1].indexOf("(");
         int idxEnd = args[1].lastIndexOf(")");
         
+        /* identifies parameter type and performs convertion to VDM */
         if (m1.find()){
             String[] parameterlist = args[1].substring(idxStart, idxEnd).replace(")", "").replace("(", "").split(", ");
             String[] javaParamList = new String[parameterlist.length];
@@ -59,6 +84,7 @@ public class InputParameterValidator implements IValidator<String[]> {
             _returnValues = javaParamList;
         } else {
             _returnValues = new String[0];
+            /* Create identifier pattern for operation parameters */
             Matcher m2 = Pattern.compile(_regexParenthesis).matcher(args[1]);
             if(m2.find()){
                 _code = 6009;
