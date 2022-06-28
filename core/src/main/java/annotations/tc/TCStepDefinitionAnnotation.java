@@ -46,6 +46,11 @@ public class TCStepDefinitionAnnotation extends TCAnnotation
 	@Override
 	public void tcBefore(TCClassDefinition clazz)
 	{
+		// Clean generated step definitions
+		StepDefinitionCleaner stepDefinitionCleaner = new StepDefinitionCleaner();
+		stepDefinitionCleaner.Cleanup(clazz);
+
+		// Generate help functions and class
         TCExpression nameArg = args.elementAt(0);
 		StepDefinitionBuilder stepDefinitionBuilder = new StepDefinitionBuilder();
 		stepDefinitionBuilder.BuildStepDefinitionClass(clazz.name.getName(), nameArg);
@@ -68,8 +73,7 @@ public class TCStepDefinitionAnnotation extends TCAnnotation
 
     @Override
 	public void tcAfter(TCClassDefinition clazz){
-        StepDefinitionCleaner stepDefinitionCleaner = new StepDefinitionCleaner();
-		stepDefinitionCleaner.Cleanup(clazz);
+        
 	}
 
 

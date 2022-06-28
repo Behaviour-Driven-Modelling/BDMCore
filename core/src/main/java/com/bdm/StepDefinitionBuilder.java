@@ -1,5 +1,7 @@
 package com.bdm;
 
+import java.io.Console;
+
 import com.bdm.factory.FactoryProvider;
 import com.bdm.factory.locators.FactoryLocator;
 import com.bdm.factory.locators.MethodLocator;
@@ -14,11 +16,13 @@ import com.fujitsu.vdmj.tc.expressions.TCStringLiteralExpression;
 
 import javassist.ClassPool;
 import javassist.CtClass;
+import javassist.Modifier;
 import javassist.NotFoundException;
 import javassist.bytecode.DuplicateMemberException;
 
 
 public class StepDefinitionBuilder {
+    private static final String packageName = "specification.";
     public void BuildStepDefinitionClass(String className, TCExpression nameArgument)
     {
         ValidatorFactory validatorFactory = (ValidatorFactory)FactoryProvider.GetFactory(FactoryLocator.ValidatorFactory);
@@ -31,12 +35,13 @@ public class StepDefinitionBuilder {
             TCStringLiteralExpression temporaryObjectName = (TCStringLiteralExpression)args[0];
             try {
                 ClassPool pool = ClassPool.getDefault();
-                CtClass ctclass = pool.getCtClass(className);
+                CtClass ctclass = pool.getCtClass(packageName+className);
                 StepDefinitionClassWriter(ctclass,pool,temporaryObjectName.value.value);
             } catch (NotFoundException e) {
                 try {
                     ClassPool pool = ClassPool.getDefault();
-                    CtClass ctclass = pool.makeClass(className);
+                    
+                    CtClass ctclass = pool.makeClass(packageName+className);
                     StepDefinitionClassWriter(ctclass,pool,temporaryObjectName.value.value);
                 } catch (Exception exception) {
                     System.out.printf("exception thrown: %s %s\n", exception.getMessage(),this);
@@ -68,7 +73,7 @@ public class StepDefinitionBuilder {
             try {
                 if(inputParameterValidator.Validate(inputArgs)) {
                     ClassPool pool = ClassPool.getDefault();
-                    CtClass ctclass = pool.getCtClass(def.name.getModule());
+                    CtClass ctclass = pool.getCtClass(packageName+def.name.getModule());
                     StepDefinintionMethodWriter(def,ctclass,nameArgumentSL.value.value, inputParameterValidator.ReturnValues(), annotationType, valueArgumentSL.value.value);
                 } else {
                     def.report(inputParameterValidator.Code(), inputParameterValidator.Message());
@@ -78,7 +83,7 @@ public class StepDefinitionBuilder {
                 try {
                     if(inputParameterValidator.Validate(inputArgs)) {
                         ClassPool pool = ClassPool.getDefault();
-                        CtClass ctclass = pool.makeClass(def.name.getModule());
+                        CtClass ctclass = pool.makeClass(packageName+def.name.getModule());
                         StepDefinintionMethodWriter(def,ctclass,nameArgumentSL.value.value, inputParameterValidator.ReturnValues(), annotationType, valueArgumentSL.value.value);
                     } else {
                         def.report(inputParameterValidator.Code(), inputParameterValidator.Message());
@@ -128,10 +133,13 @@ public class StepDefinitionBuilder {
             ctclass.defrost();	
         }
         ctclass.setSuperclass(pool.get("com.fujitsu.vdmjunit.VDMJUnitTestPP"));
+        
         try {
             ctclass.addMethod(startMethod.Create(temporaryObjectName, "start", null, AnnotationTypes.BeforeAll, null, ctclass, false));
             ctclass.addMethod(setupMethod.Create(temporaryObjectName, "setup", null, AnnotationTypes.Before, null, ctclass, false));
-            ctclass.addMethod(helperMethod.Create(temporaryObjectName, ctclass.getName(), null, null, null, ctclass, false));                
+            String functionName = ctclass.getName().substring(ctclass.getName().lastIndexOf(".")+1);
+            //System.out.println("FUNCTiONAME: " + functionName);
+            ctclass.addMethod(helperMethod.Create(temporaryObjectName, functionName, null, null, null, ctclass, false));                
         } catch (DuplicateMemberException exce) {
             //System.out.printf("exception thrown: %s %s\n", exce.getMessage(),this);
         } 

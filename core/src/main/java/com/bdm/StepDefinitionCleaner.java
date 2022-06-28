@@ -13,16 +13,13 @@ import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.CtMethod;
 import javassist.NotFoundException;
-import javassist.bytecode.AnnotationsAttribute;
-import javassist.bytecode.MethodInfo;
-import javassist.bytecode.annotation.Annotation;
-import javassist.bytecode.annotation.StringMemberValue;
 
 public class StepDefinitionCleaner {
+    private static final String packageName = "specification.";
     public void Cleanup(TCClassDefinition clazz) {
         try {
 			ClassPool pool = ClassPool.getDefault();
-			CtClass ctclass = pool.getCtClass(clazz.name.getName());
+			CtClass ctclass = pool.getCtClass(packageName+clazz.name.getName());
 			if (ctclass.isFrozen()) {
 				ctclass.defrost();
 			}
@@ -44,16 +41,15 @@ public class StepDefinitionCleaner {
                 
 			}
 			for (CtMethod method : ctclass.getDeclaredMethods()) {
+
 				RemoveMethodsNotInDefinition(definitionNames,method,ctclass);
-                RemoveMethodsOnAnnotation(BDMUtility.BDMType(AnnotationTypes.Given), annotationNames, method, ctclass);
-                RemoveMethodsOnAnnotation(BDMUtility.BDMType(AnnotationTypes.When), annotationNames, method, ctclass);
-                RemoveMethodsOnAnnotation(BDMUtility.BDMType(AnnotationTypes.Then), annotationNames, method, ctclass);
+                
 			}
 			ctclass.writeFile(VDMUtility.FindTargetFolder());
 		} catch (NotFoundException exc) {
             try {
                 ClassPool pool = ClassPool.getDefault();
-                CtClass ctclass = pool.makeClass(clazz.name.getName());
+                CtClass ctclass = pool.makeClass(packageName+clazz.name.getName());
                 
                 TCDefinitionList definitions = clazz.getDefinitions();
 
@@ -73,9 +69,7 @@ public class StepDefinitionCleaner {
                 }
             for (CtMethod method : ctclass.getDeclaredMethods()) {
 				RemoveMethodsNotInDefinition(definitionNames,method,ctclass);
-                RemoveMethodsOnAnnotation(BDMUtility.BDMType(AnnotationTypes.Given), annotationNames, method, ctclass);
-                RemoveMethodsOnAnnotation(BDMUtility.BDMType(AnnotationTypes.When), annotationNames, method, ctclass);
-                RemoveMethodsOnAnnotation(BDMUtility.BDMType(AnnotationTypes.Then), annotationNames, method, ctclass);
+
 			}
                 ctclass.writeFile(VDMUtility.FindTargetFolder());
             } catch (Exception e) {
@@ -90,27 +84,8 @@ public class StepDefinitionCleaner {
 
     private void RemoveMethodsNotInDefinition(List<String> definitionNames, CtMethod method, CtClass ctclass) throws NotFoundException 
     {
-        if(!definitionNames.contains(method.getName()))
-        {
-            if(method.getName()!= "start" && method.getName()!= "checkLocalVariable" && method.getName() != "setup"){
-                ctclass.removeMethod(method);
-            }
-            
-        }
-    }
-
-    private void RemoveMethodsOnAnnotation(String annotation,List<String> annotationNames, CtMethod method, CtClass ctclass) throws NotFoundException
-    {
-        if (method.hasAnnotation(annotation)) {
-            MethodInfo minfo = method.getMethodInfo();
-            AnnotationsAttribute attr = (AnnotationsAttribute)minfo.getAttribute(AnnotationsAttribute.visibleTag);
-            
-            Annotation an = attr.getAnnotation(annotation);
-            String s = ((StringMemberValue) an.getMemberValue("value")).getValue().toString();
-            if(!annotationNames.contains(s.trim())){
-                ctclass.removeMethod(method);
-
-            }
+        if(method.getName()!= "start" && method.getName()!= "checkLocalVariable" && method.getName() != "setup"){
+            ctclass.removeMethod(method);
         }
     }
 
